@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Library Management System - Book Borrowing and Returning</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+      }
+      header {
+        background-color: #4caf50;
+        color: white;
+        padding: 1em;
+        text-align: center;
+      }
+      .container {
+        padding: 20px;
+        text-align: left;
+      }
+      input[type="text"] {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+      button {
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 10px;
+        margin-left: 5px;
+      }
+      button:hover {
+        background-color: #45a049;
+      }
+      .book-list {
+        display:grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 5px;
+        margin-top: 20px;
+      }
+      .book {
+        background-color: white;
+        border-radius: 5px;
+        padding: 15px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        text-align: center;
+       
+      }
+      .book-title {
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+      .book-author {
+        color: #555;
+      }
+      .availability {
+        margin-top: 10px;
+      }
+      .available {
+        color: green;
+      }
+      .borrowed {
+        color: red;
+      }
+      .Deadline {
+        color: red;
+      }
+      .category {
+        color: #4caf50;
+        font-size: 0.9em;
+        margin-bottom: 5px;
+      }
+      footer {
+        background-color: #4caf50;
+        color: white;
+        text-align: center;
+        padding: 10px;
+        margin-top: 20px;
+      }
+      .borrowed-message {
+        margin-top: 20px;
+        padding: 15px;
+        background-color: #f9f9f9;
+        border-left: 5px solid #4caf50;
+        font-style: italic;
+      }
+      #home-page  {
+            display: inline;
+            color: #4CAF50;
+            text-align: right;
+text-decoration: none;            
+        }
+        .navbar a{
+            text-decoration: none;
+            font-size: 30px;
+            font-weight: bold;
+            color: #f9f9f9;
+            padding: 12px;
+            
+        }
+        
+
+      .navbar a:hover {
+        background-color: #ddd;
+        color: black;
+        padding-bottom: 20px;
+      }
+        .navbar {
+        background-color: #343a40;
+        padding-top: 10px;
+        padding-bottom: 20px;
+
+        
+        justify-content: space-between;
+
+        color: white;
+        padding-left: 930px;
+        font-size: 30px;
+        font-weight: bold;
+      }
+        #home-page {
+           color: #555;
+
+        }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Library Management System - Book Borrowing and Returning</h1>
+    </header>
+    <div  id="home-page">
+        <!-- Navbar -->
+        <div class="navbar">
+          <a href=https://www.coqlibrary.ca/#>Catalog</a>
+          <a href="notification.html">Notification</a>
+          <a href="borrow.html">Borrow</a>
+          <a href="reservation.html">Reservation</a>
+          <a href="Untitled-1.html">Support</a>
+        </div>
+    <main class="container">
+      <h2>Search and Borrow a Book</h2>
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Enter book title or author"
+      />
+      <button onclick="searchBooks()">Search</button>
+
+      <div id="bookList" class="book-list"></div>
+      <div id="borrowedMessage" class="borrowed-message"></div>
+    </main>
+
+    <footer>
+      <p>&copy; 2024 Library Management System. All rights reserved.</p>
+    </footer>
+
+    <script>
+      // Sample books array with some books already borrowed
+      let books = [
+        {
+          id: 1,
+          title: "Introduction to Algorithms",
+          author: "Thomas H. Cormen",
+          available: true,
+          category: "Technology",
+        },
+        {
+          id: 2,
+          title: "Clean Code",
+          author: "Robert C. Martin",
+          available: false,
+          category: "Technology",
+          borrowedBy: "John Doe",
+          Deadline: "NOV-11",
+        },
+        {
+          id: 3,
+          title: "Artificial Intelligence: A Modern Approach",
+          author: "Stuart Russell",
+          available: true,
+          category: "Technology",
+        },
+        {
+          id: 4,
+          title: "War and Peace",
+          author: "Leo Tolstoy",
+          available: true,
+          category: "Literature",
+        },
+        {
+          id: 5,
+          title: "Pride and Prejudice",
+          author: "Jane Austen",
+          available: false,
+          category: "Literature",
+          borrowedBy: "Alice Smith",
+        },
+        {
+          id: 6,
+          title: "To Kill a Mockingbird",
+          author: "Harper Lee",
+          available: true,
+          category: "Literature",
+        },
+        {
+          id: 7,
+          title: "Angel",
+          author: "Harper Lee",
+          available: true,
+          category: "Literature",
+        },
+        {
+          id: 8,
+          title: "Love",
+          author: "Leo Tolstoy",
+          available: true,
+          category: "Literature",
+        },
+        {
+          id: 9,
+          title: "Hate",
+          author: "Jane Austen",
+          available: false,
+          category: "Literature",
+          borrowedBy: "Amanpreet",
+        },
+        {
+          id: 10,
+          title: "sweet",
+          author: "Harper Lee",
+          available: true,
+          category: "Literature",
+        },
+        {
+          id: 11,
+          title: "The Pragmatic Programmer",
+          author: "Andrew Hunt",
+          available: true,
+          category: "Technology",
+        },
+        {
+          id: 12,
+          title: "You Don't Know JS",
+          author: "Kyle Simpson",
+          available: true,
+          category: "Technology",
+        },
+        {
+          id: 13,
+          title: "Design Patterns",
+          author: "Erich Gamma",
+          available: true,
+          category: "Technology",
+        },
+        {
+          id: 14,
+          title: "The Lord of the Rings",
+          author: "J.R.R. Tolkien",
+          available: false,
+          category: "Fantasy",
+          borrowedBy: "Sarah Clark",
+        },
+        {
+          id: 15,
+          title: "Harry Potter and the Sorcerer's Stone",
+          author: "J.K. Rowling",
+          available: true,
+          category: "Fantasy",
+        },
+        {
+          id: 16,
+          title: "A Game of Thrones",
+          author: "George R. R. Martin",
+          available: false,
+          category: "Fantasy",
+          borrowedBy: "David Miller",
+        },
+        {
+          id: 17,
+          title: "The Hobbit",
+          author: "J.R.R. Tolkien",
+          available: true,
+          category: "Fantasy",
+        },
+        {
+          id: 18,
+          title: "Dune",
+          author: "Frank Herbert",
+          available: true,
+          category: "Science Fiction",
+        },
+        {
+          id: 19,
+          title: "Neuromancer",
+          author: "William Gibson",
+          available: true,
+          category: "Science Fiction",
+        },
+        {
+          id: 20,
+          title: "The Left Hand of Darkness",
+          author: "Ursula K. Le Guin",
+          available: false,
+          category: "Science Fiction",
+          borrowedBy: "Emily Davis",
+        },
+        {
+          id: 21,
+          title: "Sapiens: A Brief History of Humankind",
+          author: "Yuval Noah Harari",
+          available: true,
+          category: "Non-Fiction",
+        },
+        {
+          id: 22,
+          title: "Educated",
+          author: "Tara Westover",
+          available: true,
+          category: "Non-Fiction",
+        },
+        {
+          id: 23,
+          title: "Becoming",
+          author: "Michelle Obama",
+          available: true,
+          category: "Non-Fiction",
+        },
+        {
+          id: 24,
+          title: "The Subtle Art of Not Giving a F*ck",
+          author: "Mark Manson",
+          available: false,
+          category: "Self-Help",
+          borrowedBy: "Kevin Harris",
+        },
+        {
+          id: 25,
+          title: "Atomic Habits",
+          author: "James Clear",
+          available: true,
+          category: "Self-Help",
+        },
+        {
+          id: 26,
+          title: "Thinking, Fast and Slow",
+          author: "Daniel Kahneman",
+          available: true,
+          category: "Psychology",
+        },
+        {
+          id: 27,
+          title: "The Power of Habit",
+          author: "Charles Duhigg",
+          available: true,
+          category: "Self-Help",
+        },
+        {
+          id: 28,
+          title: "The Lean Startup",
+          author: "Eric Ries",
+          available: true,
+          category: "Business",
+        },
+        {
+          id: 29,
+          title: "Zero to One",
+          author: "Peter Thiel",
+          available: true,
+          category: "Business",
+        },
+        {
+          id: 30,
+          title: "Good to Great",
+          author: "Jim Collins",
+          available: false,
+          category: "Business",
+          borrowedBy: "Steve Wilson",
+        },
+        {
+          id: 31,
+          title: "Rich Dad Poor Dad",
+          author: "Robert T. Kiyosaki",
+          available: true,
+          category: "Finance",
+        },
+        {
+          id: 32,
+          title: "The Intelligent Investor",
+          author: "Benjamin Graham",
+          available: true,
+          category: "Finance",
+        },
+        {
+          id: 33,
+          title: "Principles",
+          author: "Ray Dalio",
+          available: true,
+          category: "Finance",
+        },
+        {
+          id: 34,
+          title: "The 4-Hour Workweek",
+          author: "Timothy Ferriss",
+          available: true,
+          category: "Self-Help",
+        },
+        {
+          id: 35,
+          title: "Grit",
+          author: "Angela Duckworth",
+          available: true,
+          category: "Psychology",
+        },
+        {
+          id: 36,
+          title: "Man's Search for Meaning",
+          author: "Viktor E. Frankl",
+          available: false,
+          category: "Psychology",
+          borrowedBy: "Anna Brown",
+        },
+        {
+          id: 37,
+          title: "The Alchemist",
+          author: "Paulo Coelho",
+          available: true,
+          category: "Fiction",
+        },
+        {
+          id: 38,
+          title: "The Road",
+          author: "Cormac McCarthy",
+          available: true,
+          category: "Fiction",
+        },
+        {
+          id: 39,
+          title: "The Shining",
+          author: "Stephen King",
+          available: true,
+          category: "Horror",
+        },
+        {
+          id: 40,
+          title: "Dracula",
+          author: "Bram Stoker",
+          available: false,
+          category: "Horror",
+          borrowedBy: "Oliver Thompson",
+        },
+        // More books here...
+      ];
+
+      // Function to search books based on user input
+      function searchBooks() {
+        const searchInput = document
+          .getElementById("searchInput")
+          .value.toLowerCase();
+        const bookList = document.getElementById("bookList");
+        const borrowedMessage = document.getElementById("borrowedMessage");
+        bookList.innerHTML = ""; // Clear previous search results
+        borrowedMessage.innerHTML = ""; // Clear previous messages
+
+        const filteredBooks = books.filter(
+          (book) =>
+            book.title.toLowerCase().includes(searchInput) ||
+            book.author.toLowerCase().includes(searchInput)
+        );
+
+        if (filteredBooks.length === 0) {
+          bookList.innerHTML = "<p>No books found.</p>";
+          
+        } else {
+          filteredBooks.forEach((book) => {
+            const bookDiv = document.createElement("div");
+            bookDiv.classList.add("book");
+
+            const category = document.createElement("div");
+            category.classList.add("category");
+            category.textContent = `Category: ${book.category}`;
+
+            const title = document.createElement("div");
+            title.classList.add("book-title");
+            title.textContent = book.title;
+
+            const author = document.createElement("div");
+            author.classList.add("book-author");
+            author.textContent = `Author: ${book.author}`;
+
+
+            const availability = document.createElement("div");
+            availability.classList.add("availability");
+
+            const Deadline = document.createElement("div");
+            availability.classList.add("Deadline");
+            availability.textContent = `Deadline:  ${book.Deadline}`;
+            
+            if (book.available) {
+              availability.classList.add("available");
+              availability.textContent = "Available";
+              const borrowButton = document.createElement("button");
+              borrowButton.textContent = "Borrow";
+              borrowButton.onclick = () => borrowBook(book.id);
+              availability.appendChild(borrowButton);
+              const Deadline = document.createElement("div");
+            
+            } else {
+              availability.classList.add("borrowed");
+              availability.textContent = `Borrowed by: ${book.borrowedBy}`;
+              availability.classList.add("Deadline");
+            availability.textContent = `Deadline:  ${book.Deadline}`;
+            }
+
+            bookDiv.appendChild(category);
+            bookDiv.appendChild(title);
+            bookDiv.appendChild(author);
+            bookDiv.appendChild(availability);
+            bookList.appendChild(bookDiv);
+            bookList.appendChild(Deadline);
+          });
+        }
+      }
+
+      // Function to borrow a book
+      function borrowBook(bookId) {
+        const book = books.find((b) => b.id === bookId);
+        if (book && book.available) {
+          const borrower = prompt("Please enter your name:");
+          if (borrower) {
+            book.available = false;
+            book.borrowedBy = borrower;
+            availability.classList.add("Deadline");
+            availability.textContent = `Deadline:  ${book.Deadline}`;
+            const borrowerName = document.getElementById("borrower-name").value;
+            document.getElementById(
+              "borrowedMessage"
+            ).innerHTML = `You have borrowed "${book.title}" by ${book.author}. Please return it when finished.`;
+            searchBooks(); // Refresh the book list
+          }
+        } else {
+          alert("This book is not available for borrowing.");
+          const borrower = document.getElementById("borrower").value;
+        }
+      }
+
+      // Function to return a book (you can add this in future enhancements)
+      function returnBook(bookId) {
+        const book = books.find((b) => b.id === bookId);
+        if (book && !book.available) {
+          book.available = true;
+          book.borrowedBy = null;
+          alert(`Thank you for returning "${book.title}".`);
+          searchBooks(); // Refresh the book list
+        } else {
+          alert("This book has not been borrowed.");
+        }
+      }
+    </script>
+  </body>
+</html>
