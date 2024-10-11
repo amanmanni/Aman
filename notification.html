@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Library Management System - Notifications</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+      }
+      header {
+        background-color: #4caf50;
+        color: white;
+        padding: 1em;
+        text-align: center;
+      }
+      .container {
+        padding: 20px;
+        text-align: left;
+      }
+      .notification-box {
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        padding: 15px;
+        margin-bottom: 15px;
+      }
+      .notification-header {
+        font-weight: bold;
+        font-size: 1.1em;
+        margin-bottom: 10px;
+      }
+      .notification-message {
+        margin: 10px 0;
+      }
+      .notification-time {
+        font-size: 0.9em;
+        color: #555;
+      }
+      .btn-dismiss {
+        background-color: #ff4f4f;
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        float: right;
+      }
+      .btn-dismiss:hover {
+        background-color: #ff2f2f;
+      }
+      #home-page  {
+            display: inline;
+            color: #4CAF50;
+            text-align: right;
+text-decoration: none;            
+        }
+        .navbar a{
+            text-decoration: none;
+            font-size: 30px;
+            font-weight: bold;
+            color: #f9f9f9;
+            padding: 12px;
+            
+        }
+        
+
+      .navbar a:hover {
+        background-color: #ddd;
+        color: black;
+        padding-bottom: 20px;
+      }
+        .navbar {
+        background-color: #343a40;
+        padding-top: 10px;
+        padding-bottom: 20px;
+
+        
+        justify-content: space-between;
+
+        color: white;
+        padding-left: 930px;
+        font-size: 30px;
+        font-weight: bold;
+      }
+        #home-page {
+           color: #555;
+
+        }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Library Management System - Notifications</h1>
+    </header>
+    <div  id="home-page">
+        <!-- Navbar -->
+        <div class="navbar">
+          <a href=https://www.coqlibrary.ca/#>Catalog</a>
+          <a href="notification.html">Notification</a>
+          <a href="borrow.html">Borrow</a>
+          <a href="reservation.html">Reservation</a>
+          <a href="Untitled-1.html">Support</a>
+        </div>
+    <main class="container">
+      <div id="notifications"></div>
+    </main>
+
+    <script>
+      // Sample notifications array (simulating data fetched from a server)
+      const notifications = [
+        {
+          id: 1,
+          header: "Overdue Book Alert",
+          message:
+            "The book 'Introduction to Algorithms' is overdue. Please return it to the library by tomorrow to avoid fines.",
+          time: "2 hours ago",
+        },
+        {
+          id: 2,
+          header: "Reservation Ready",
+          message:
+            "The book 'Artificial Intelligence: A Modern Approach' is now available for pickup.",
+          time: "1 day ago",
+        },
+        {
+          id: 3,
+          header: "New Arrivals",
+          message:
+            "New books on Data Science are now available in the library. Check them out!",
+          time: "3 days ago",
+        },
+      ];
+
+      // Function to display notifications
+      function displayNotifications() {
+        const notificationContainer = document.getElementById("notifications");
+
+        notifications.forEach((notification) => {
+          const notificationBox = document.createElement("div");
+          notificationBox.classList.add("notification-box");
+
+          const header = document.createElement("div");
+          header.classList.add("notification-header");
+          header.textContent = notification.header;
+
+          const message = document.createElement("div");
+          message.classList.add("notification-message");
+          message.textContent = notification.message;
+
+          const time = document.createElement("div");
+          time.classList.add("notification-time");
+          time.textContent = notification.time;
+
+          const dismissButton = document.createElement("button");
+          dismissButton.classList.add("btn-dismiss");
+          dismissButton.textContent = "Dismiss";
+          dismissButton.onclick = () => dismissNotification(notification.id);
+
+          notificationBox.appendChild(header);
+          notificationBox.appendChild(message);
+          notificationBox.appendChild(time);
+          notificationBox.appendChild(dismissButton);
+
+          notificationContainer.appendChild(notificationBox);
+        });
+      }
+
+      // Function to dismiss a notification
+      function dismissNotification(notificationId) {
+        const notificationContainer = document.getElementById("notifications");
+        notifications = notifications.filter(
+          (notification) => notification.id !== notificationId
+        );
+        notificationContainer.innerHTML = ""; // Clear the notifications
+        displayNotifications(); // Re-render the remaining notifications
+      }
+
+      // Initial display of notifications
+      displayNotifications();
+    </script>
+  </body>
+</html>
